@@ -14,9 +14,13 @@
     <name>dolares-de-confianza</name>
     <description>dolares-de-confianza</description>
     <properties>
-        <java.version>11</java.version>
+        <java.version>8</java.version>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -67,6 +71,7 @@
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>dolares-de-confianza</finalName>
     </build>
 
 </project>

@@ -1,0 +1,60 @@
+version: '2'
+
+services:
+  app:
+    image: 'dolares-de-confianza:latest'
+    ports:
+      - "8080:8080"
+    build:
+      context: .
+    container_name: app
+    depends_on:
+      db_postgres:
+        condition: service_healthy
+      db_neo4j:
+        condition: service_healthy
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db_postgres:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=pass
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_NEO4J_URI=bolt://host.docker.internal:7687
+      - SPRING_NEO4J_AUTHENTICATION_USERNAME=neo4j
+      - SPRING_NEO4J_AUTHENTICATION_PASSWORD=pass
+      - SPRING_DATA_NEO4J_DATABASE=neo4j
+      - LOGGIN_LEVEL_ORG_SPRINGFRAMEWORK_DATA_NEO4J=DEBUG
+
+  db_postgres:
+    image: 'postgres:13.1-alpine'
+    container_name: postgres_db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=pass
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  db_neo4j:
+    image: 'neo4j:latest'
+    container_name: neo4j_db
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - ./conf:/conf
+      - ./data:/data
+      - ./import:/import
+      - ./logs:/logs
+      - ./plugins:/plugins
+    environment:
+      NEO4J_AUTH: neo4j/pass
+      NEO4J_dbms_logs_debug_level: DEBUG
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider localhost:7474 || exit 1"]
+      interval: 10s
+      timeout: 2s
+      retries: 10

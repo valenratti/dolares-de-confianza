@@ -1,4 +1,4 @@
-version: '2'
+version: '2.1'
 
 services:
   app:
@@ -7,7 +7,8 @@ services:
       - "8080:8080"
     build:
       context: .
-    container_name: app
+    container_name: dolares-de-confianza
+    restart: on-failure
     depends_on:
       db_postgres:
         condition: service_healthy
@@ -18,14 +19,15 @@ services:
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=pass
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.spatial.dialect.postgis.PostgisDialect
       - SPRING_NEO4J_URI=bolt://host.docker.internal:7687
       - SPRING_NEO4J_AUTHENTICATION_USERNAME=neo4j
       - SPRING_NEO4J_AUTHENTICATION_PASSWORD=pass
       - SPRING_DATA_NEO4J_DATABASE=neo4j
-      - LOGGIN_LEVEL_ORG_SPRINGFRAMEWORK_DATA_NEO4J=DEBUG
+      - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_DATA_NEO4J=DEBUG
 
   db_postgres:
-    image: 'postgres:13.1-alpine'
+    image: 'postgis/postgis:12-3.1-alpine'
     container_name: postgres_db
     ports:
       - "5432:5432"

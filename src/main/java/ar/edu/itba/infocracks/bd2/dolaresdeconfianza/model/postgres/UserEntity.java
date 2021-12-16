@@ -18,6 +18,9 @@ public class UserEntity {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
+
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 
@@ -36,8 +39,9 @@ public class UserEntity {
 
     protected UserEntity(){}
 
-    public UserEntity(String username, String password, String firstName, String lastName, Point location) {
+    public UserEntity(String username, String email, String password, String firstName, String lastName, Point location) {
         this.username = username;
+        this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;

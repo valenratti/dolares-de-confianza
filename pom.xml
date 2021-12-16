@@ -15,6 +15,7 @@
     <description>dolares-de-confianza</description>
     <properties>
         <java.version>8</java.version>
+        <org.slf4j.version>1.7.32</org.slf4j.version>
     </properties>
     <dependencies>
         <dependency>
@@ -78,6 +79,18 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${org.slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>${org.slf4j.version}</version>
         </dependency>
     </dependencies>
 

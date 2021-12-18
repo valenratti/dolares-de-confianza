@@ -7,15 +7,15 @@ import java.util.Collection;
 
 public class MyUserDetails implements UserDetails {
 
-    private String email;
+    private String username;
 
     private String password;
 
     private Collection<? extends GrantedAuthority> grantedAuthorities;
 
 
-    public MyUserDetails(String email, String password, Collection<? extends GrantedAuthority> grantedAuthorities) {
-        this.email = email;
+    public MyUserDetails(String username, String password, Collection<? extends GrantedAuthority> grantedAuthorities) {
+        this.username = username;
         this.password = password;
         this.grantedAuthorities = grantedAuthorities;
     }
@@ -32,7 +32,7 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return username;
     }
 
     @Override

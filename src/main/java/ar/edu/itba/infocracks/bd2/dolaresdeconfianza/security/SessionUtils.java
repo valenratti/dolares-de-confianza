@@ -30,7 +30,7 @@ public class SessionUtils {
         if (token != null && token.startsWith("Bearer ")) {
             token = token.replace("Bearer ", "");
         }
-        return userEntityRepository.findByEmail(this.extractUsername(token)).orElseThrow(NoSuchElementException::new);
+        return userEntityRepository.findByUsername(this.extractUsername(token)).orElseThrow(NoSuchElementException::new);
     }
 
     public String extractUsername(String token) {

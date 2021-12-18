@@ -12,6 +12,6 @@ import java.util.Optional;
 public interface UserEntityRepository extends JpaRepository<UserEntity,Long> {
     Optional<UserEntity> findByEmail(String email);
     Optional<UserEntity> findByUsername(String username);
-    @Query(value="SELECT * FROM users WHERE ST_DWithin(cast(users.location as geography),ST_SetSRID(ST_Point(?2, ?1),4326), 10000);", nativeQuery = true)
-    List<UserEntity> findNearbyUsers(double locationX, double locationY);
+    @Query(value="SELECT * FROM users WHERE ST_DWithin(cast(users.location as geography),ST_SetSRID(ST_Point(?1, ?2),4326), ?3);", nativeQuery = true)
+    List<UserEntity> findNearbyUsers(double locationX, double locationY, Double distance);
 }

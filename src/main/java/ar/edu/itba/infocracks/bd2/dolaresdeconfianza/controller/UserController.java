@@ -9,13 +9,7 @@ import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.security.SessionUtils;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,9 +39,9 @@ public class UserController {
     }
 
     @RequestMapping("/explore")
-    public List<ExploreUserDTO> getUsers() {
+    public List<ExploreUserDTO> getUsers(@RequestParam(defaultValue = "10000.0") Double distance) {
         UserEntity userEntity = sessionUtils.getLoggedInUser();
-        return userService.getSuggestedFriendshipsForUser(userEntity);
+        return userService.getSuggestedFriendshipsForUser(userEntity,distance);
     }
 
     @SneakyThrows

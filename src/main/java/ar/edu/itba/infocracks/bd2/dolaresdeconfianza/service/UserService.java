@@ -8,7 +8,6 @@ import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.model.dto.FriendshipInvitat
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.model.postgres.UserEntity;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.security.AuthenticationResponse;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.security.LoginForm;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -20,7 +19,7 @@ public interface UserService {
 
     AuthenticationResponse authenticate(LoginForm form) throws InvalidCredentialsException;
 
-    List<ExploreUserDTO> getSuggestedFriendshipsForUser(UserEntity exploringUser);
+    List<ExploreUserDTO> getSuggestedFriendshipsForUser(UserEntity exploringUser, Double distance);
 
     FriendshipInvitationDTO sendFriendshipInvite(UserEntity userEntity, Long userId) throws UserNotFoundException;
 }

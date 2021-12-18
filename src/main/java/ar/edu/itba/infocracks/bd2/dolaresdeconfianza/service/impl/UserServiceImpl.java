@@ -89,10 +89,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<ExploreUserDTO> getSuggestedFriendshipsForUser(UserEntity exploringUser) {
+    public List<ExploreUserDTO> getSuggestedFriendshipsForUser(UserEntity exploringUser, Double distance) {
         return userEntityRepository.findNearbyUsers(exploringUser.getLocation().getX(),
-                exploringUser.getLocation().getY())
-                .stream().map((recommendedUser) -> ExploreUserDTO.of(exploringUser, recommendedUser) )
+                exploringUser.getLocation().getY(), distance)
+                .stream()
+                .filter(userEntity -> !userEntity.getId().equals(exploringUser.getId()))
+                .map((recommendedUser) -> ExploreUserDTO.of(exploringUser, recommendedUser) )
                 .collect(Collectors.toList());
     }
 

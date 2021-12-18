@@ -10,7 +10,7 @@ RUN mvn dependency:go-offline
 
 COPY . .
 
-RUN mvn package
+RUN mvn package -Dmaven.test.skip
 
 # App
 

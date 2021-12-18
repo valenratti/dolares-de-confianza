@@ -4,6 +4,7 @@ import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.controller.dto.UserDTO;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.exception.InvalidCredentialsException;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.exception.UserNotFoundException;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.model.dto.ExploreUserDTO;
+import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.model.dto.FriendshipInvitationDTO;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.model.postgres.UserEntity;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.security.AuthenticationResponse;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.security.LoginForm;
@@ -21,5 +22,5 @@ public interface UserService {
 
     List<ExploreUserDTO> getSuggestedFriendshipsForUser(UserEntity exploringUser);
 
-    void sendFriendshipInvite(UserEntity userEntity, Long userId) throws UserNotFoundException;
+    FriendshipInvitationDTO sendFriendshipInvite(UserEntity userEntity, Long userId) throws UserNotFoundException;
 }

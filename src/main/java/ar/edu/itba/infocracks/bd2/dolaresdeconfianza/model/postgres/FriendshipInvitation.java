@@ -21,6 +21,15 @@ public class FriendshipInvitation {
     private UserEntity invitedBy;
     @ManyToOne
     private UserEntity invitedUser;
+    private LocalDateTime invitedAt;
     private LocalDateTime acceptedAt;
     private LocalDateTime deniedAt;
+
+    public FriendshipInvitation(UserEntity invitedBy, UserEntity invitedUser, LocalDateTime invitedAt, LocalDateTime acceptedAt, LocalDateTime deniedAt) {
+        this.invitedBy = invitedBy;
+        this.invitedUser = invitedUser;
+        this.invitedAt = invitedAt;
+        this.acceptedAt = acceptedAt;
+        this.deniedAt = deniedAt;
+    }
 }

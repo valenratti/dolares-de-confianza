@@ -5,8 +5,11 @@ import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.controller.dto.UserDTO;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.exception.InvalidCredentialsException;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.exception.UserNotFoundException;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.model.dto.ExploreUserDTO;
+import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.model.dto.FriendshipInvitationDTO;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.model.neo4j.UserNode;
+import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.model.postgres.FriendshipInvitation;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.model.postgres.UserEntity;
+import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.repository.postgres.FriendshipInvitationRepository;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.repository.postgres.UserEntityRepository;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.repository.neo4j.UserNodeRepository;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.security.AuthenticationResponse;
@@ -16,8 +19,6 @@ import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,9 +28,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,23 +43,26 @@ public class UserServiceImpl implements UserService {
     private final UserNodeRepository userNodeRepository;
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
+    private final FriendshipInvitationRepository friendshipInvitationRepository;
     private final SessionUtils sessionUtils;
 
     private final PasswordEncoder encoder;
 
     @Autowired
-    public UserServiceImpl(PasswordEncoder passwordEncoder, UserEntityRepository userEntityRepository, UserNodeRepository userNodeRepository, AuthenticationManager authenticationManager, UserDetailsService userDetailsService, SessionUtils sessionUtils){
+    public UserServiceImpl(PasswordEncoder passwordEncoder, UserEntityRepository userEntityRepository, UserNodeRepository userNodeRepository, AuthenticationManager authenticationManager, UserDetailsService userDetailsService, FriendshipInvitationRepository friendshipInvitationRepository, SessionUtils sessionUtils){
         this.encoder = passwordEncoder;
         this.userEntityRepository = userEntityRepository;
         this.userNodeRepository = userNodeRepository;
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
+        this.friendshipInvitationRepository = friendshipInvitationRepository;
         this.sessionUtils = sessionUtils;
     }
 
     @Override
     @Transactional
-    public UserEntity save(String username, String email, String password, String firstName, String lastName, double locationX, double locationY) {
+    public UserEntity save(String username, String email, String password, String firstName, String lastName,
+                           double locationX, double locationY) {
         UserEntity user = userEntityRepository.save(new UserEntity(username, email, encoder.encode(password),
                 firstName,lastName, GeometryConfig.pointFromCoordinates(locationX,locationY)));
         UserNode userNode = userNodeRepository.save(new UserNode(user.getId(),user.getUsername()));
@@ -93,9 +97,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void sendFriendshipInvite(UserEntity userEntity, Long userId) throws UserNotFoundException {
-        UserEntity user = userEntityRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-
+    public FriendshipInvitationDTO sendFriendshipInvite(UserEntity invitedBy, Long userId) throws UserNotFoundException {
+        UserEntity invitedUser = userEntityRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        FriendshipInvitation friendshipInvitation = new FriendshipInvitation(invitedBy, invitedUser, LocalDateTime.now(),
+                null, null);
+        friendshipInvitationRepository.save(friendshipInvitation);
+        return FriendshipInvitationDTO.of(friendshipInvitation);
     }
 
     private ExploreUserDTO toExploreUserDTO(UserEntity exploringUser, UserEntity recommendedUser){

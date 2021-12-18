@@ -25,7 +25,7 @@ public class SessionUtils {
 
     private final String SECRET_KEY = "secret";
 
-    public UserEntity getUserByJwtAuthenticationToken(){
+    public UserEntity getLoggedInUser(){
         String token = request.getHeader("Authorization");
         if (token != null && token.startsWith("Bearer ")) {
             token = token.replace("Bearer ", "");

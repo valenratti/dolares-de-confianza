@@ -3,6 +3,7 @@ package ar.edu.itba.infocracks.bd2.dolaresdeconfianza.model.postgres;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.Type;
 import org.locationtech.jts.geom.Point;
 
 import javax.persistence.*;

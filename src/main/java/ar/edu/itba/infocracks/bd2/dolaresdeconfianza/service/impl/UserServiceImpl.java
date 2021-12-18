@@ -3,6 +3,8 @@ package ar.edu.itba.infocracks.bd2.dolaresdeconfianza.service.impl;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.config.GeometryConfig;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.controller.dto.UserDTO;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.exception.InvalidCredentialsException;
+import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.exception.UserNotFoundException;
+import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.model.dto.ExploreUserDTO;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.model.neo4j.UserNode;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.model.postgres.UserEntity;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.repository.postgres.UserEntityRepository;
@@ -28,6 +30,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -55,38 +59,59 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserEntity save(String username, String email, String password, String firstName, String lastName, double locationX, double locationY) {
-
-        UserEntity user = userEntityRepository.save(new UserEntity(username, email, encoder.encode(password), firstName,lastName, GeometryConfig.pointFromCoordinates(locationX,locationY)));
+        UserEntity user = userEntityRepository.save(new UserEntity(username, email, encoder.encode(password),
+                firstName,lastName, GeometryConfig.pointFromCoordinates(locationX,locationY)));
         UserNode userNode = userNodeRepository.save(new UserNode(user.getId(),user.getUsername()));
-
         LOGGER.info("Saved {} to both databases", user);
         return user;
     }
 
     @Override
     public AuthenticationResponse authenticate(LoginForm authenticationRequest) throws InvalidCredentialsException {
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+                authenticationRequest.getUsername(), authenticationRequest.getPassword());
         Authentication authentication;
-
         try {
             authentication = authenticationManager.authenticate(token);
         }
         catch (AuthenticationException e){
             throw new InvalidCredentialsException();
         }
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
-
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         final String jwt = sessionUtils.generateToken(userDetails);
 
         return new AuthenticationResponse(jwt);
     }
 
+    @Override
+    public List<ExploreUserDTO> getSuggestedFriendshipsForUser(UserEntity exploringUser) {
+        return userEntityRepository.findNearbyUsers(exploringUser.getLocation().getX(),
+                exploringUser.getLocation().getY())
+                .stream().map((recommendedUser) -> ExploreUserDTO.of(exploringUser, recommendedUser) )
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void sendFriendshipInvite(UserEntity userEntity, Long userId) throws UserNotFoundException {
+        UserEntity user = userEntityRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+
+    }
+
+    private ExploreUserDTO toExploreUserDTO(UserEntity exploringUser, UserEntity recommendedUser){
+        //TODO: Investigar en que medida te retorna el location.distance();
+        return new ExploreUserDTO(recommendedUser.getId(),
+                recommendedUser.getUsername(),
+                exploringUser.getLocation().distance(recommendedUser.getLocation()));
+    }
+
+
     public UserDTO signUp(UserDTO user) {
-        UserEntity userEntity = this.save(user.getUsername(), user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName(), user.getLocationX(), user.getLocationY());
-        return new UserDTO(userEntity.getId(), userEntity.getUsername(), userEntity.getEmail(), userEntity.getFirstName(), userEntity.getLastName(), userEntity.getLocation().getX(),userEntity.getLocation().getY());
+        UserEntity userEntity = this.save(user.getUsername(), user.getEmail(), user.getPassword(), user.getFirstName(),
+                user.getLastName(), user.getLocationX(), user.getLocationY());
+        return new UserDTO(userEntity.getId(), userEntity.getUsername(), userEntity.getEmail(),
+                userEntity.getFirstName(), userEntity.getLastName(), userEntity.getLocation().getX(),
+                userEntity.getLocation().getY());
     }
 
 

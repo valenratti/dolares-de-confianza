@@ -3,6 +3,7 @@ package ar.edu.itba.infocracks.bd2.dolaresdeconfianza.model.postgres;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.Type;
 import org.locationtech.jts.geom.Point;
 
 import javax.persistence.*;
@@ -17,6 +18,9 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
 
     @Column(name = "username", nullable = false, unique = true)
     private String username;
@@ -36,8 +40,9 @@ public class UserEntity {
 
     protected UserEntity(){}
 
-    public UserEntity(String username, String password, String firstName, String lastName, Point location) {
+    public UserEntity(String username, String email, String password, String firstName, String lastName, Point location) {
         this.username = username;
+        this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;

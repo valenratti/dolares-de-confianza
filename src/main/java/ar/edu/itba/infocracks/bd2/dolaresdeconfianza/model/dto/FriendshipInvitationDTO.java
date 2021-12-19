@@ -1,5 +1,6 @@
 package ar.edu.itba.infocracks.bd2.dolaresdeconfianza.model.dto;
 
+import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.config.GeometryConfig;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.model.postgres.FriendshipInvitation;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,7 +19,7 @@ public class FriendshipInvitationDTO {
 
     public static FriendshipInvitationDTO of(FriendshipInvitation invitation){
         return new FriendshipInvitationDTO(invitation.getId(), invitation.getInvitedBy().getUsername(),
-                invitation.getInvitedBy().getLocation().distance(invitation.getInvitedUser().getLocation()),
+                GeometryConfig.getDistanceInMeters(invitation.getInvitedUser().getLocation().getCoordinate(), invitation.getInvitedBy().getLocation().getCoordinate()),
                 invitation.getInvitedAt());
     }
 }

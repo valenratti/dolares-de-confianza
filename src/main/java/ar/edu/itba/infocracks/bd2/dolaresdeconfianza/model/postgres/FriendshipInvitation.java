@@ -2,10 +2,7 @@ package ar.edu.itba.infocracks.bd2.dolaresdeconfianza.model.postgres;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -16,6 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class FriendshipInvitation {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
     private UserEntity invitedBy;

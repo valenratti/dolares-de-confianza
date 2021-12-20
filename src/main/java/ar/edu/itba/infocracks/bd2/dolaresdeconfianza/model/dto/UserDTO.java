@@ -1,4 +1,4 @@
-package ar.edu.itba.infocracks.bd2.dolaresdeconfianza.controller.dto;
+package ar.edu.itba.infocracks.bd2.dolaresdeconfianza.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -17,7 +17,8 @@ public class ExploreOfferDTO {
     private String username;
     private String email; // TODO: y el phone number? o deberia devolver solo el userid?
 
-    public static ExploreOfferDTO of(UserEntity exploringUser, UserEntity recommendedUser){
-        return new ExploreOfferDTO();
-    }
+    // TODO: Ver si hace falta
+//    public static ExploreOfferDTO of(UserEntity exploringUser, UserEntity recommendedUser){
+//        return new ExploreOfferDTO();
+//    }
 }

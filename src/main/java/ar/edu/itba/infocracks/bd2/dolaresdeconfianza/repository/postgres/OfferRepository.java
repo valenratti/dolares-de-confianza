@@ -9,9 +9,12 @@ import java.util.List;
 
 @Repository
 public interface OfferRepository extends JpaRepository<Offer,Long> {
-    // TODO: Query
-    @Query()
+    @Query(value =
+            "SELECT * FROM offers WHERE from_currency LIKE ?1 AND to_currency LIKE ?2 " +
+                    "AND min_rate <= ?3  AND max_rate >= ?4 AND min_amount <= ?5 AND max_amount >= ?6 " +
+                    "ST_DWithin(cast(users.location as geography),ST_SetSRID(ST_Point(?7, ?8), 4326), ?9)", nativeQuery = true)
     List<Offer> findOffersByCurrencyAndRateAndAmountAndDistance(
-            String from_currency, String to_currency, double minRate, double maxRate,
+            String fromCurrency, String toCurrency, double minRate, double maxRate,
             double minAmount, double maxAmount, double locationX, double locationY, Double distance);
+    // minRate y maxAmount no tienen mucho sentido
 }

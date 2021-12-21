@@ -46,6 +46,7 @@ public class UserController {
     @ApiOperation("Explore Nearby Users")
     public List<ExploreUserDTO> getUsers(@RequestParam(defaultValue = "10000.0") Double distance) {
         UserEntity userEntity = sessionUtils.getLoggedInUser();
+        // TODO: que tambien se pueda explorar por trust level
         return userService.getSuggestedFriendshipsForUser(userEntity,distance);
     }
 

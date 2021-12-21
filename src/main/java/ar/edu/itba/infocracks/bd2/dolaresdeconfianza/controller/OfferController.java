@@ -30,9 +30,9 @@ public class OfferController {
     @ApiOperation("Explore offers")
     public List<ExploreOfferDTO> getOffers(@RequestParam(defaultValue = "USD") String from_currency,
                                            @RequestParam(defaultValue = "ARS") String to_currency,
-                                           @RequestParam double minRate, @RequestParam double maxRate,
+                                           @RequestParam(defaultValue = "0.0") double minRate, @RequestParam double maxRate,
                                            @RequestParam(defaultValue = "0.0") double minAmount,
-                                           @RequestParam double maxAmount, @RequestParam(defaultValue = "10") int trustLevel,
+                                           @RequestParam(defaultValue = "10000000.0") double maxAmount, @RequestParam(defaultValue = "10") int trustLevel,
                                            @RequestParam long distance) {
         UserEntity userEntity = sessionUtils.getLoggedInUser();
         return offerService.getOffers(userEntity, from_currency, to_currency, minRate, maxRate, minAmount, maxAmount, distance, trustLevel);

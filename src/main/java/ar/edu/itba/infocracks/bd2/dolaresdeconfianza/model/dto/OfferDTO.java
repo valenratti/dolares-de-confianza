@@ -6,7 +6,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 public class OfferDTO {
     private Long id;
     private String fromCurrency;

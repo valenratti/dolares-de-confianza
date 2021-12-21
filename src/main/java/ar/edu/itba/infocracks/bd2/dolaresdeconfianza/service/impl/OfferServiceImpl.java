@@ -47,7 +47,7 @@ public class OfferServiceImpl implements OfferService {
     public List<ExploreOfferDTO> getOffers(UserEntity userEntity, String fromCurrency, String toCurrency, double minRate, double maxRate, double minAmount, double maxAmount, long distance, int trustLevel) {
         List<Offer> offerList = offerRepository.findOffersByCurrencyAndRateAndAmountAndDistance(
                 fromCurrency, toCurrency, minRate, maxRate, minAmount, maxAmount,
-                userEntity.getLocation().getX(), userEntity.getLocation().getY(), distance);
+                userEntity.getLocation().getX(), userEntity.getLocation().getY(), (double) distance);
 
         /* Chequeamos que se cumplan ambos trust level: el que puso el vendedor
             (el de la oferta) y el que pone el comprador (el parametro). */

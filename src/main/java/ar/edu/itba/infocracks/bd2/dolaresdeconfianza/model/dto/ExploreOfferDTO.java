@@ -22,8 +22,8 @@ public class ExploreOfferDTO {
 
     public static ExploreOfferDTO of(Offer o, UserEntity explorerUser){
         UserEntity u1 = o.getUser(); // El usuario que oferta
-        int distance = GeometryConfig.getDistanceInMeters(u1.getLocation().getCoordinate(), explorerUser.getLocation().getCoordinate())
+        double distance = GeometryConfig.getDistanceInMeters(u1.getLocation().getCoordinate(), explorerUser.getLocation().getCoordinate());
 
-        return new ExploreOfferDTO(o.getId(), o.getFromToRate(), o.getMinAmount(), o.getMaxAmount(), o.getTrustLevel(), , u1.getUsername(), u1.getEmail());
+        return new ExploreOfferDTO(o.getId(), o.getFromToRate(), o.getMinAmount(), o.getMaxAmount(), o.getTrustLevel(), distance , u1.getUsername(), u1.getEmail());
     }
 }

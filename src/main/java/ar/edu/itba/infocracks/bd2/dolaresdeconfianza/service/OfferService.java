@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface OfferService {
 
-    List<ExploreOfferDTO> getOffers(UserEntity userEntity, String fromCurrency, String toCurrency, double minRate, double maxRate, double minAmount, double maxAmount, long distance, int trustLevel);
+    List<ExploreOfferDTO> getOffers(UserEntity userEntity, String fromCurrency, String toCurrency,  double maxRate, double minAmount,  long distance, int trustLevel);
 
     OfferDTO createOffer(UserEntity userEntity, OfferDTO offerDTO);
 

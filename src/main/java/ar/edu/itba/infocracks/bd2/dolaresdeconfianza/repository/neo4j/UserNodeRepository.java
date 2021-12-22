@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface UserNodeRepository extends Neo4jRepository<UserNode,Long> {
-    @Query("MATCH (user1:User),(user2:User) where user1.username = $u1 and user2.username = $u2 RETURN length(shortestPath((user1)-[*]-(user2)))")
+    @Query("MATCH (user1:User),(user2:User) where user1.username = $u1 and user2.username = $u2 RETURN length(shortestPath((user1)-[*..15]-(user2)))")
     int shortestPath(String u1, String u2);
 
     @Query("MATCH (u1:User )-[*1..$r]-(u2:User) where u1 = $u RETURN u2")

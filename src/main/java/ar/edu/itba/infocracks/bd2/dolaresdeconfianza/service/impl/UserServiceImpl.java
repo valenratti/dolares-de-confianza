@@ -162,7 +162,9 @@ public class UserServiceImpl implements UserService {
     public List<FriendshipInvitationDTO> getFriendshipsInvites() {
         UserEntity loggedUser = sessionUtils.getLoggedInUser();
         return friendshipInvitationRepository.findAllByInvitedUser(loggedUser)
-                .stream().map(FriendshipInvitationDTO::of)
+                .stream()
+                .filter(obj -> obj.getAcceptedAt() == null && obj.getDeniedAt() == null)
+                .map(FriendshipInvitationDTO::of)
                 .collect(Collectors.toList());
     }
 

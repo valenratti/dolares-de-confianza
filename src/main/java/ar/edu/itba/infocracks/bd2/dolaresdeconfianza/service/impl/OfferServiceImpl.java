@@ -52,10 +52,17 @@ public class OfferServiceImpl implements OfferService {
         /* Chequeamos que se cumplan ambos trust level: el que puso el vendedor
             (el de la oferta) y el que pone el comprador (el parametro). */
         List<Offer> toBeRemoved = new ArrayList<>();
+        Integer shortestPath;
+        String callingUser = userEntity.getUsername(), offerUser;
         for (Offer o: offerList) {
-            int shortestPath = userNodeRepository.shortestPath(userEntity.getUsername(), o.getUser().getUsername());
-            if( shortestPath > trustLevel || shortestPath > o.getTrustLevel() )
+            offerUser = o.getUser().getUsername();
+            if(callingUser.equals(offerUser))
                 toBeRemoved.add(o);
+            else {
+                shortestPath = userNodeRepository.shortestPath(callingUser,offerUser);
+                if (shortestPath == null || shortestPath > trustLevel || shortestPath > o.getTrustLevel())
+                    toBeRemoved.add(o);
+            }
         }
 
         offerList.removeAll(toBeRemoved);
@@ -79,7 +86,7 @@ public class OfferServiceImpl implements OfferService {
         Long userId;
         
         if(!op.isPresent())
-            return -1;
+            throw new IllegalArgumentException("Offer does not exist");
         
         userId = op.get().getUser().getId();
         if(userId != userEntity.getId())

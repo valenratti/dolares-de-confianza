@@ -1,7 +1,7 @@
 package ar.edu.itba.infocracks.bd2.dolaresdeconfianza.service.impl;
 
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.config.GeometryConfig;
-import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.controller.dto.UserDTO;
+import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.model.dto.UserDTO;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.exception.InvalidCredentialsException;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.exception.UserNotFoundException;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.model.InvitationResponse;
@@ -166,7 +166,7 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
-
+// TODO: por que no tiene @Override ?
     public UserDTO signUp(UserDTO user) {
         UserEntity userEntity = this.save(user.getUsername(), user.getEmail(), user.getPassword(), user.getFirstName(),
                 user.getLastName(), user.getLocationX(), user.getLocationY());

@@ -1,6 +1,6 @@
 package ar.edu.itba.infocracks.bd2.dolaresdeconfianza.controller;
 
-import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.controller.dto.UserDTO;
+import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.model.dto.UserDTO;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.exception.InvalidCredentialsException;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.exception.UserNotFoundException;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.model.dto.ExploreUserDTO;
@@ -10,9 +10,7 @@ import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.security.LoginForm;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.security.SessionUtils;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.service.UserService;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.models.Response;
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,6 +46,7 @@ public class UserController {
     @ApiOperation("Explore Nearby Users")
     public List<ExploreUserDTO> getUsers(@RequestParam(defaultValue = "10000.0") Double distance) {
         UserEntity userEntity = sessionUtils.getLoggedInUser();
+        // TODO: que tambien se pueda explorar por trust level
         return userService.getSuggestedFriendshipsForUser(userEntity,distance);
     }
 

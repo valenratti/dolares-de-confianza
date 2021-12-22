@@ -1,6 +1,6 @@
 package ar.edu.itba.infocracks.bd2.dolaresdeconfianza.service;
 
-import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.controller.dto.UserDTO;
+import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.model.dto.UserDTO;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.exception.InvalidCredentialsException;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.exception.UserNotFoundException;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.model.InvitationResponse;

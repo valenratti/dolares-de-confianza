@@ -19,7 +19,7 @@ public class OfferController {
     private final OfferService offerService;
     private final SessionUtils sessionUtils;
 
-    @PostMapping("/create")
+    @PostMapping("/")
     @ApiOperation("Create a new offer")
     public OfferDTO createOffer(@RequestBody OfferDTO offer) {
         UserEntity userEntity = sessionUtils.getLoggedInUser();
@@ -38,7 +38,7 @@ public class OfferController {
         return offerService.getOffers(userEntity, from_currency, to_currency, minRate, maxRate, minAmount, maxAmount, distance, trustLevel);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/{offerId}")
     @ApiOperation("Delete an offer")
     public long deleteOffer(@PathVariable long offerId) {
         UserEntity userEntity = sessionUtils.getLoggedInUser();

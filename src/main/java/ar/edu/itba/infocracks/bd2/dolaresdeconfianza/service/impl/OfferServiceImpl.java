@@ -9,6 +9,7 @@ import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.repository.postgres.OfferRe
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.repository.postgres.UserEntityRepository;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.security.SessionUtils;
 import ar.edu.itba.infocracks.bd2.dolaresdeconfianza.service.OfferService;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -18,9 +19,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class OfferServiceImpl implements OfferService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
     private final OfferRepository offerRepository;
     private final UserEntityRepository userEntityRepository;
@@ -39,7 +40,7 @@ public class OfferServiceImpl implements OfferService {
                       double minAmount, double maxAmount, int trustLevel) {
         Offer offer = offerRepository.save(new Offer(userEntity, fromCurrency, toCurrency, fromToRate,
                 minAmount, maxAmount, trustLevel));
-        LOGGER.info("Offer {} saved", offer);
+        log.info("Offer {} saved", offer);
         return offer;
     }
 

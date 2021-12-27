@@ -1,5 +1,5 @@
 # Dólares de Confianza
-Bases de Datos II - Diciembre 2022
+Bases de Datos II - Diciembre 2021
 
 ## Autores
 
